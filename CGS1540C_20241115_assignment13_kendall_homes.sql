@@ -1,59 +1,59 @@
 # DB Schema Creation Script
 # Author: Reinier Garcia
-# Assignment 13: Kendall Houses, LLC
+# Assignment 13: Kendall Houses, LLC (New Homes)
 
 DROP TABLE IF EXISTS sellers;
 CREATE TABLE IF NOT EXISTS sellers
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,                                      -- Unique identifier for each seller
+    id          INT AUTO_INCREMENT PRIMARY KEY,                                 -- Unique identifier for each seller
 
-    first_name  VARCHAR(255)                        NOT NULL,
-    middle_name VARCHAR(255)                        NULL,
-    last_name   VARCHAR(255)                        NOT NULL,
-    email       VARCHAR(255)                        NOT NULL,
-    phone       VARCHAR(255)                        NOT NULL,
+    first_name  VARCHAR(255) NOT NULL,
+    middle_name VARCHAR(255) NULL,
+    last_name   VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NOT NULL,
+    phone       VARCHAR(255) NOT NULL,
 
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,                            -- When the record was created
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                            -- When the record was created
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
 );
 
 DROP TABLE IF EXISTS customers;
 CREATE TABLE IF NOT EXISTS customers
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,                                       -- Unique identifier for each customer
+    id          INT AUTO_INCREMENT PRIMARY KEY,                                  -- Unique identifier for each customer
 
-    seller_id   INT                                 NOT NULL,                         -- Foreign key linking to the sellers table
+    seller_id   INT          NOT NULL,                                           -- Foreign key linking to the sellers table
 
-    first_name  VARCHAR(255)                        NOT NULL,
-    middle_name VARCHAR(255)                        NULL,
-    last_name   VARCHAR(255)                        NOT NULL,
-    email       VARCHAR(255)                        NOT NULL,
-    phone       VARCHAR(255)                        NOT NULL,
+    first_name  VARCHAR(255) NOT NULL,
+    middle_name VARCHAR(255) NULL,
+    last_name   VARCHAR(255) NOT NULL,
+    email       VARCHAR(255) NOT NULL,
+    phone       VARCHAR(255) NOT NULL,
 
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,                             -- When the record was created
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP, -- Last update timestamp
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- When the record was created
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last update timestamp
 
-    FOREIGN KEY (seller_id) REFERENCES sellers (id) ON DELETE CASCADE                 -- Belongs-to-one Relation to sellers
+    FOREIGN KEY (seller_id) REFERENCES sellers (id) ON DELETE CASCADE            -- Belongs-to-one Relation to sellers
 
 );
 
 DROP TABLE IF EXISTS house_models;
 CREATE TABLE IF NOT EXISTS house_models
 (
-    id               INT AUTO_INCREMENT PRIMARY KEY,                                      -- Unique identifier for each house_model
+    id               INT AUTO_INCREMENT PRIMARY KEY,                                 -- Unique identifier for each house_model
 
-    name             VARCHAR(255)                        NOT NULL,
-    bedrooms         INT       DEFAULT 1                 NOT NULL,
-    bathrooms        INT       DEFAULT 1                 NOT NULL,
-    square_footage   INT                                 NOT NULL,
-    number_of_floors INT       DEFAULT 1                 NOT NULL,
-    garage_capacity  INT       DEFAULT 0                 NULL,
-    price            decimal(12, 2)                      NOT NULL,
-    description      text                                NULL,
+    name             VARCHAR(255)        NOT NULL,
+    bedrooms         INT       DEFAULT 1 NOT NULL,
+    bathrooms        INT       DEFAULT 1 NOT NULL,
+    square_footage   INT                 NOT NULL,
+    number_of_floors INT       DEFAULT 1 NOT NULL,
+    garage_capacity  INT       DEFAULT 0 NULL,
+    price            decimal(12, 2)      NOT NULL,
+    description      text                NULL,
     is_active        boolean   DEFAULT NULL,
 
-    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,                            -- When the record was created
-    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                            -- When the record was created
+    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
 );
 
 DROP TABLE IF EXISTS houses;
