@@ -2,7 +2,15 @@
 # Author: Reinier Garcia
 # Assignment 13: Kendall Houses, LLC (New Homes)
 
+
+# The table dropping must be performed in the reverse order in which they are created.
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS visits;
+DROP TABLE IF EXISTS houses;
+DROP TABLE IF EXISTS house_models;
+DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS sellers;
+
 CREATE TABLE IF NOT EXISTS sellers
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,                                 -- Unique identifier for each seller
@@ -17,7 +25,6 @@ CREATE TABLE IF NOT EXISTS sellers
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
 );
 
-DROP TABLE IF EXISTS customers;
 CREATE TABLE IF NOT EXISTS customers
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,                                  -- Unique identifier for each customer
@@ -37,7 +44,6 @@ CREATE TABLE IF NOT EXISTS customers
 
 );
 
-DROP TABLE IF EXISTS house_models;
 CREATE TABLE IF NOT EXISTS house_models
 (
     id               INT AUTO_INCREMENT PRIMARY KEY,                                 -- Unique identifier for each house_model
@@ -56,7 +62,6 @@ CREATE TABLE IF NOT EXISTS house_models
     updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
 );
 
-DROP TABLE IF EXISTS houses;
 CREATE TABLE IF NOT EXISTS houses
 (
     id             INT AUTO_INCREMENT PRIMARY KEY,                                                               -- Unique identifier for each house
@@ -76,7 +81,6 @@ CREATE TABLE IF NOT EXISTS houses
     FOREIGN KEY (house_model_id) REFERENCES house_models (id) ON DELETE CASCADE                                  -- Relation to house_models
 );
 
-DROP TABLE IF EXISTS visits;
 CREATE TABLE IF NOT EXISTS visits
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,                                  -- Unique identifier for each visit
@@ -91,7 +95,6 @@ CREATE TABLE IF NOT EXISTS visits
     FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE CASCADE              -- Relation to houses
 );
 
-DROP TABLE IF EXISTS comments;
 CREATE TABLE IF NOT EXISTS comments
 (
     id          INT AUTO_INCREMENT PRIMARY KEY,                                  -- Unique identifier for each comment
