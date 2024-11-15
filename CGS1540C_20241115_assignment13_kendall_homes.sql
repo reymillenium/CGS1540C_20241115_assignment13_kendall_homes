@@ -1,6 +1,11 @@
-CREATE TABLE customers
+# DB Schema Creation Script
+# Author: Reinier Garcia
+# Assignment 13: Kendall Houses, LLC
+
+DROP TABLE IF EXISTS sellers;
+CREATE TABLE IF NOT EXISTS sellers
 (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
+    id          INT AUTO_INCREMENT PRIMARY KEY,                                      -- Unique identifier for each seller
 
     first_name  VARCHAR(255)                        NOT NULL,
     middle_name VARCHAR(255)                        NULL,
@@ -8,33 +13,16 @@ CREATE TABLE customers
     email       VARCHAR(255)                        NOT NULL,
     phone       VARCHAR(255)                        NOT NULL,
 
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,                            -- When the record was created
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
 );
 
-CREATE TABLE house_models
+DROP TABLE IF EXISTS customers;
+CREATE TABLE IF NOT EXISTS customers
 (
-    id               INT AUTO_INCREMENT PRIMARY KEY,
+    id          INT AUTO_INCREMENT PRIMARY KEY,                                       -- Unique identifier for each customer
 
-    name             VARCHAR(255)                         NOT NULL,
-    bedrooms         INT        DEFAULT 1                 NOT NULL,
-    bathrooms        INT        DEFAULT 1                 NOT NULL,
-    square_footage   INT                                  NOT NULL,
-    number_of_floors INT        DEFAULT 1                 NOT NULL,
-    garage_capacity  INT        DEFAULT 0                 NULL,
-    price            decimal(12, 2)                       NOT NULL,
-    description      text                                 NULL,
-    is_active        tinyint(1) DEFAULT 1                 NULL,
-
-    created_at       TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NULL,
-    updated_at       TIMESTAMP  DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
-);
-
-
-
-CREATE TABLE sellers
-(
-    id          INT AUTO_INCREMENT PRIMARY KEY,
+    seller_id   INT                                 NOT NULL,                         -- Foreign key linking to the sellers table
 
     first_name  VARCHAR(255)                        NOT NULL,
     middle_name VARCHAR(255)                        NULL,
@@ -42,7 +30,80 @@ CREATE TABLE sellers
     email       VARCHAR(255)                        NOT NULL,
     phone       VARCHAR(255)                        NOT NULL,
 
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,                             -- When the record was created
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP, -- Last update timestamp
+
+    FOREIGN KEY (seller_id) REFERENCES sellers (id) ON DELETE CASCADE                 -- Belongs-to-one Relation to sellers
+
 );
+
+DROP TABLE IF EXISTS house_models;
+CREATE TABLE IF NOT EXISTS house_models
+(
+    id               INT AUTO_INCREMENT PRIMARY KEY,                                      -- Unique identifier for each house_model
+
+    name             VARCHAR(255)                        NOT NULL,
+    bedrooms         INT       DEFAULT 1                 NOT NULL,
+    bathrooms        INT       DEFAULT 1                 NOT NULL,
+    square_footage   INT                                 NOT NULL,
+    number_of_floors INT       DEFAULT 1                 NOT NULL,
+    garage_capacity  INT       DEFAULT 0                 NULL,
+    price            decimal(12, 2)                      NOT NULL,
+    description      text                                NULL,
+    is_active        boolean   DEFAULT NULL,
+
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL,                            -- When the record was created
+    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP -- Last update timestamp
+);
+
+DROP TABLE IF EXISTS houses;
+CREATE TABLE IF NOT EXISTS houses
+(
+    id             INT AUTO_INCREMENT PRIMARY KEY,                                                               -- Unique identifier for each house
+
+    house_model_id INT          NOT NULL,                                                                        -- Foreign key linking to the house_models table
+
+    address        VARCHAR(255) NOT NULL,                                                                        -- Address of the house
+    status         ENUM ('available', 'sold', 'reserved') DEFAULT 'available',                                   -- Status of the house
+    lot_size       INT,                                                                                          -- Lot size in square feet
+    build_date     DATE,                                                                                         -- Date when the house was built
+    price          DECIMAL(12, 2),                                                                               -- Selling price of the house
+    description    TEXT,                                                                                         -- Optional description of the house
+
+    created_at     TIMESTAMP                              DEFAULT CURRENT_TIMESTAMP,                             -- When the record was created
+    updated_at     TIMESTAMP                              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last update timestamp
+
+    FOREIGN KEY (house_model_id) REFERENCES house_models (id) ON DELETE CASCADE                                  -- Relation to house_models
+);
+
+DROP TABLE IF EXISTS visits;
+CREATE TABLE IF NOT EXISTS visits
+(
+    id          INT AUTO_INCREMENT PRIMARY KEY,                                  -- Unique identifier for each visit
+
+    customer_id INT NOT NULL,                                                    -- Foreign key linking to the customers table
+    house_id    INT NOT NULL,                                                    -- Foreign key linking to the houses table
+
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- When the record was created
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last update timestamp
+
+    FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE,       -- Relation to customers
+    FOREIGN KEY (house_id) REFERENCES houses (id) ON DELETE CASCADE              -- Relation to houses
+);
+
+DROP TABLE IF EXISTS comments;
+CREATE TABLE IF NOT EXISTS comments
+(
+    id          INT AUTO_INCREMENT PRIMARY KEY,                                  -- Unique identifier for each comment
+
+    visit_id    INT  NOT NULL,                                                   -- Foreign key linking to the visits table
+
+    description TEXT NOT NULL,
+
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- When the record was created
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Last update timestamp
+
+    FOREIGN KEY (visit_id) REFERENCES visits (id) ON DELETE CASCADE              -- Relation to visits
+);
+
 
